@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+        <script src="heatmap.js"></script>
+        <script src="leaflet-heatmap.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+        <title>Precognition</title>
+    </head>
+    <body>
+        <div class="container-fluid h-100" id="app">
+            <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Login</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form v-on:submit.prevent>
+                                <div class="form-group">
+                                    <label for="userID">User ID</label>
+                                    <input v-model="id" type="text" class="form-control form-control-lg" id="userID" aria-describedby="incorrect" placeholder="Enter user ID">
+                                    <small id="incorrect" class="form-text text-danger" hidden="true">incorrect userID or Password</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input v-model="password" type="password" class="form-control" id="password" placeholder="Enter Password">
+                                </div>
+                                <button v-on:click="authenticate" type="submit" class="btn btn-primary">login</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="my-1 row">
+                <div class="col-4 col-md-4 col-lg-4 col-xl-4">
+                    <h1 class="text-primary">Precognition</h1>
+                </div>
+                <div class="col-8 col-md-8 col-lg-8 col-xl-8">
+                    <span class="float-right">
+                        {{ user }}
+                        <button v-on:click="showLogin" class="pl-3 btn btn-primary" data-target="#login">login</button>
+                    </span>
+                </div>
+            </div>
+            <div class="mb-3 row h-100">
+                <div class="col-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="input-group mb-4 w-100">
+                        <input v-model="keyword_string" type="text" class="form-control" placeholder="Enter Hashtag" aria-label="Search" aria-describedby="add">
+                        <div class="input-group-append">
+                            <button v-on:click="addWords" class="btn btn-outline-primary" type="button" id="add">Add</button>
+                        </div>
+                    </div>
+                    <div class="mb-4 card border-primary w-100 h-25">
+                        <div class="card-text w-100 h-100">
+                            <span v-for="keyword in keywords" v-if="keyword != ''" class="badge badge-pill badge-primary">
+                                {{ keyword }}
+                            </span>
+                        </div>
+                        <div class="card-footer">
+                            <button v-on:click="clearTags" class="btn btn-primary float-left">clear</button>
+                            <button v-on:click="saveTags" class="btn btn-primary float-right">save</button>
+                        </div>
+                    </div>
+                    <div class="my-4 card border-primary w-100 h-25">
+                        <div class="card-header text-primary"><h5>Actions</h5></div>
+                        <div class="card-text w-100 h-100">
+
+                        </div>
+                    </div>
+                    <div class="mt-4 card border-primary w-100 h-25">
+                        <div class="card-header text-primary"><h5>Trends</h5></div>
+                        <div class="card-text w-100 h-100">
+                            <span v-for="trend in trends" class="badge badge-pill badge-primary">
+                                {{ trend }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8 col-md-8 col-lg-8 col-xl-8">
+                    <div class="card border-primary" id="mapid"></div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script src="client.js"></script>
+    </body>
+</html>

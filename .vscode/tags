@@ -1,0 +1,48 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+EMBEDDING_DIM	../word_embeddings.py	/^EMBEDDING_DIM = 50$/;"	kind:variable	line:19
+MAX_NUM_WORDS	../word_embeddings.py	/^MAX_NUM_WORDS = 2000$/;"	kind:variable	line:17
+MAX_SEQUENCE_LENGTH	../word_embeddings.py	/^MAX_SEQUENCE_LENGTH = 1000$/;"	kind:variable	line:18
+X	../lstm_new.py	/^X = pad_sequences(X)$/;"	kind:variable	line:35
+X	../lstm_new.py	/^X = tokenizer.texts_to_sequences(data['text'].values)$/;"	kind:variable	line:34
+X	../rnn_lstm.py	/^X = pad_sequences(X, maxlen=28, dtype='int32', value=0)$/;"	kind:variable	line:26
+X	../rnn_lstm.py	/^X = tokenizer.texts_to_sequences(sentences)$/;"	kind:variable	line:25
+Y	../lstm_new.py	/^Y = pd.get_dummies(data['sentiment']).values$/;"	kind:variable	line:46
+batch_size	../lstm_new.py	/^batch_size = 32$/;"	kind:variable	line:49
+batch_size	../word_embeddings.py	/^	    batch_size=batch_size,$/;"	kind:variable	line:85
+batch_size	../word_embeddings.py	/^batch_size = 32$/;"	kind:variable	line:77
+data	../lstm_new.py	/^data = data[['text','sentiment']]$/;"	kind:variable	line:23
+data	../lstm_new.py	/^data = pd.read_csv('Sentiment.csv')$/;"	kind:variable	line:21
+data	../word_embeddings.py	/^data = pad_sequences(sequences, maxlen=MAX_SEQUENCE_LENGTH)$/;"	kind:variable	line:30
+data	../word_embeddings.py	/^data = pd.read_csv('train.csv', encoding='latin-1')$/;"	kind:variable	line:21
+embed_dim	../lstm_new.py	/^embed_dim = 128$/;"	kind:variable	line:36
+embedding_layer	../word_embeddings.py	/^embedding_layer = Embedding(num_words,$/;"	kind:variable	line:60
+epochs	../word_embeddings.py	/^	    epochs=num_epochs)$/;"	kind:variable	line:86
+input_length	../word_embeddings.py	/^                            input_length=data.shape[1])$/;"	kind:variable	line:62
+labels	../word_embeddings.py	/^labels = list(data['Sentiment'].values.flatten())$/;"	kind:variable	line:23
+labels	../word_embeddings.py	/^labels = to_categorical(np.asarray(labels))$/;"	kind:variable	line:31
+lstm_new.py	../lstm_new.py	1;"	kind:file	line:1
+lstm_out	../lstm_new.py	/^lstm_out = 196$/;"	kind:variable	line:37
+max_fatures	../lstm_new.py	/^max_fatures = 2000$/;"	kind:variable	line:31
+max_fatures	../rnn_lstm.py	/^max_fatures = 2000$/;"	kind:variable	line:22
+metrics	../word_embeddings.py	/^		  metrics=['accuracy'])$/;"	kind:variable	line:75
+model	../lstm_new.py	/^model = Sequential()$/;"	kind:variable	line:39
+model	../rnn_lstm.py	/^model = load_model('lstm.h5')$/;"	kind:variable	line:17
+model	../word_embeddings.py	/^model = Sequential()$/;"	kind:variable	line:67
+num_epochs	../word_embeddings.py	/^num_epochs = 1$/;"	kind:variable	line:78
+num_words	../word_embeddings.py	/^num_words = min(MAX_NUM_WORDS, len(word_index) + 1)$/;"	kind:variable	line:42
+optimizer	../word_embeddings.py	/^		  optimizer='adam',$/;"	kind:variable	line:74
+rnn_lstm.py	../rnn_lstm.py	1;"	kind:file	line:1
+sentences	../rnn_lstm.py	/^sentences = ['hey how are you', 'i want to kill you', 'i love you', 'hi', 'sun rises in east']$/;"	kind:variable	line:18
+sequences	../word_embeddings.py	/^sequences = tokenizer.texts_to_sequences(tweets)$/;"	kind:variable	line:27
+tokenizer	../lstm_new.py	/^tokenizer = Tokenizer(num_words=max_fatures, split=' ')$/;"	kind:variable	line:32
+tokenizer	../rnn_lstm.py	/^tokenizer = Tokenizer(num_words=max_fatures, split=' ')$/;"	kind:variable	line:23
+tokenizer	../word_embeddings.py	/^tokenizer = Tokenizer(num_words=MAX_NUM_WORDS)$/;"	kind:variable	line:25
+tweets	../word_embeddings.py	/^tweets = list(data['SentimentText'].values.flatten())$/;"	kind:variable	line:22
+validation_data	../word_embeddings.py	/^	    validation_data=[data_v, labels_v],$/;"	kind:variable	line:84
+word_embeddings.py	../word_embeddings.py	1;"	kind:file	line:1
+word_index	../word_embeddings.py	/^word_index = tokenizer.word_index$/;"	kind:variable	line:29

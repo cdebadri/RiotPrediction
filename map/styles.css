@@ -1,0 +1,32 @@
+html, body {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+#mapid {
+    height: 90%;
+}
+
+.badge-pill {
+    font-size: 14px;
+    padding-right: 1rem;     
+}
+
+.badge-outline {
+    color: black;
+    border: 1px solid #999;
+    background-color: transparent;
+}
+
+.badge-outline.badge-primary {
+    border-color: blue;
+}
+
+.card-text {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#loginInfo {
+    align-content: right;
+}
