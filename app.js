@@ -29,7 +29,7 @@ function getData() {
 				_id : 0,
 				 user : 0,
 				 media : 0
-			}}).toArray((err, res) => {
+			}}).toArray(function(err, res) {
 			if (err) throw err;
 			postData = res;
 		});
@@ -57,9 +57,11 @@ http.listen(3000)
 
 var trends = require('./routes/trends.js')
 var users = require('./routes/users.js')
+var tweet = require('./routes/tweet.js')
 
 app.use('/map', express.static('map'));
 app.use('/trends', trends)
 app.use('/users', users)
+app.use('/tweet', tweet)
 
 app.listen(6050);
