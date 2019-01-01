@@ -24,7 +24,7 @@ function getData() {
 	MongoClient.connect(url, { useNewUrlParser : true }, function(err, db) {
 		if (err) throw err;
 		var dbo = db.db("MOB"); //to be completed
-		dbo.collection('posts').find({}, { 
+		dbo.collection('posts2').find({}, { 
 			projection : { 
 				_id : 0,
 				 user : 0,

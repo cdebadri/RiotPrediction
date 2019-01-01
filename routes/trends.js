@@ -15,7 +15,7 @@ var url = 'mongodb://localhost:27017/'
 
 router.get('/', function(req, res, next) {
     client.get('trends/place', { id : 23424848 }, function(err, data, response) {
-        if(response.status != 200) {
+        if(response == null || response.status != 200) {
             MongoClient.connect(url, { useNewUrlParser : true }, function(err1, db) {
                 var dbo = db.db("MOB")
                 dbo.collection("trends").find({

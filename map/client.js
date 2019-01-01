@@ -13,13 +13,21 @@ var app = new Vue ({
                 trends : new Array(0),
                 id : '',
                 password : '',
-                user : ''
+                user : '',
+                actions : [],
+                tweet : {
+                    id : '',
+                    user : '',
+                    user_screen_name : '',
+                    profile_img : '',
+                    text : '',
+                    media : [{}]
+                }
             }
     },
     methods : {
         addWords : function() {
             this.keyword_track = this.keyword_track + this.keyword_string;
-            console.log(this.keyword_track)
             this.keywords = this.keyword_track.split(',')
             this.keyword_string = '';
             this.keyword_track = this.keyword_track + ','
@@ -66,8 +74,34 @@ var app = new Vue ({
             this.saveTags()
             this.addWords()
         },
-        showPost : function(markId) {
-            console.log(markId)
+        showPost : function() {
+            console.log('reached = ' + this.tweet.id)
+            axios.get('http://localhost:6050/tweet', {
+                params : {
+                    'id_str' : this.tweet.id
+                }
+            }).then((response) => {
+                if(response.status == 200) {
+                    this.tweet.user = response.data.info.user.name
+                    this.tweet.user_screen_name = response.data.info.user.screen_name
+                    this.tweet.profile_img = response.data.info.user.profile_image_url
+                    this.tweet.text = response.data.info.text
+                    this.tweet.media = response.data.info.media 
+                    document.getElementById('profile_pic').src = this.tweet.profile_img
+                    if(typeof this.tweet.media !== 'undefined') {
+                        for(var i = 0; i < this.tweet.media.length; i++) {
+                            document.getElementById('pic' + i.toString()).src = this.tweet.media[i].media_url_https
+                        }    
+                        console.log('media=' + this.tweet.id)
+                    } else {
+                        for(var i = 0; i < 4; i++)
+                            document.getElementById('pic' + i.toString()).src = ''
+                    }
+                }
+            }).catch((error) => {
+                console.log('error')
+            })
+            $('#tweet').modal()
         }
     },
     created() {
@@ -125,25 +159,37 @@ socket.on('connect', function() {
         console.log('received');
         var postData = [{}];
         for (var i = 0; i < app.posts.length; i++) {
-            postData[i] = { 'lat' : parseFloat(app.posts[i].lat),
-                            'lon' : parseFloat(app.posts[i].lon), 
-                            'count' : 2 
+            postData[i] = { 
+                'lat' : parseFloat(app.posts[i].lat),
+                'lon' : parseFloat(app.posts[i].lon), 
+                'count' : 2 
             };
         } 
         if (typeof postData !== 'undefined' && postData.length > 0 ) {
             heatmapLayer.setData({ max : postData.length, data : postData });
             var marks = [{}]
             for (var i = 0; i < postData.length; i++) {
-                var html = '<div>' + app.posts[i].text + '</div>' +
-                            '<div><span><b>retweets:</b> ' + app.posts[i].retweets +
-                            ' <b>favorites:</b> ' + app.posts[i].favorites +
-                            ' <button class="btn btn-link">more</button>'
+                var htmldiv = document.createElement('div')
+                var div = document.createElement('div')
+                div.innerHTML = app.posts[i].text
+                htmldiv.appendChild(div)
+                div = document.createElement('div')
+                var span = document.createElement('span')
+                span.innerHTML = '<b>retweets:</b> ' + app.posts[i].retweets + ' <b>favorites:</b> ' + app.posts[i].favorites
+                var button = document.createElement('button')
+                button.className = 'btn btn-link'
+                button.innerHTML = 'more'
+                button.id = app.posts[i].id_str
+                span.appendChild(button)
+                div.appendChild(span)
+                htmldiv.appendChild(div)
+                var popup = L.popup().setContent(htmldiv)
                 marks[i] = new L.marker([postData[i].lat, postData[i].lon]).addTo(map)
-                    .bindPopup(html)
-                    .openPopup();
+                    .bindPopup(popup)
                 marks[i]._myid = app.posts[i].id_str
                 marks[i].on('popupopen', function(event) {
-                    app.showPost(event.popup._source._myid)
+                    app.tweet.id = event.popup._source._myid
+                    document.getElementById(app.tweet.id).addEventListener('click', app.showPost)
                 })
             }
         }        

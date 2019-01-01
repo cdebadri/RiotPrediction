@@ -16,7 +16,7 @@ router.get('', function(req, res, next) {
             },function(err1, data) {
                 if(err1)
                     return res.sendStatus(404)
-                return res.status(200).json({ 'data' : data })
+                return res.status(200).json({ 'info' : data })
             }
         )
     })
