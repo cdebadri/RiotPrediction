@@ -43,15 +43,16 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title text-primary">Tweet</h5>
+                            <h5 class="modal-title text-primary float-left">Tweet</h5>
+                            <h5 class="modal-title float-right">ID: {{ tweet.id }}</h5>
                         </div>
                         <div class="modal-body">
                             <div class="container-fluid" id="post">
                                 <div class="row">
-                                    <div class="col-2">
+                                    <div class="col-3">
                                         <img id="profile_pic" alt="profile pic"/>
                                     </div>
-                                    <div class="col-10">
+                                    <div class="col-9">
                                         <span class="float-left">
                                             <b>{{ tweet.user }}</b> 
                                         </span>
@@ -75,8 +76,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-primary float-right">checked</button>
+                        <div class="modal-footer" id="footer">
+                            <button v-on:click="addAction" class="btn btn-primary float-right">Act</button>
                         </div>
                     </div>
                 </div>
@@ -112,13 +113,18 @@
                         </div>
                     </div>
                     <div class="my-4 card border-primary w-100 h-25">
-                        <div class="card-header text-primary"><h5>Actions</h5></div>
+                        <div class="card-header text-primary"><b>Actions</b></div>
                         <div class="card-text w-100 h-100">
-
+                            <ul class="list-group" id="list-tab" role="tablist">
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            <button v-on:click="clearActions" class="btn btn-primary float-left">clear</button>
+                            <button v-on:click="saveActions" class="btn btn-primary float-right">save</button>
                         </div>
                     </div>
                     <div class="mt-4 card border-primary w-100 h-25">
-                        <div class="card-header text-primary"><h5>Trends</h5></div>
+                        <div class="card-header text-primary"><b>Trends</b></div>
                         <div class="card-text w-100 h-100">
                             <span v-for="trend in trends" class="badge badge-pill badge-primary">
                                 {{ trend }}

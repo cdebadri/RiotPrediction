@@ -33,6 +33,8 @@ var app = new Vue ({
             this.keyword_track = this.keyword_track + ','
         },
         authenticate : function() {
+            while(this.actions.length > 0)
+                this.actions.pop()
             axios.post('http://localhost:6050/users/auth', {
                 'id' : this.id,
                 'password' : this.password
@@ -40,8 +42,11 @@ var app = new Vue ({
                 if(response.status == 200) { 
                     $('#login').modal('hide')
                     this.user = this.id
-                    this.keyword_track = response.data.tags
+                    this.keyword_track = response.data.info.tags
                     this.addWords()
+                    for(var i = 0; i < response.data.info.actions.length; i++)
+                        this.actions.push(response.data.info.actions[i])
+                    this.loadActions()
                 }
                 else {
                     $('#login').modal()
@@ -102,6 +107,51 @@ var app = new Vue ({
                 console.log('error')
             })
             $('#tweet').modal()
+        },
+        loadActions : function() {
+            $('#list-tab').empty()
+            for(var i = 0; i < this.actions.length; i++) {
+                var idLabel = document.createElement('li')
+                idLabel.className = 'list-group-item list-group-item-action list-group-item-primary'
+                idLabel.role = 'tab'
+                idLabel.id = 'tweet' + this.actions[i]
+                idLabel.innerHTML = this.actions[i]
+                document.getElementById('list-tab').appendChild(idLabel)
+            }
+        },
+        addAction : function() {
+            $('#tweet').modal('hide')
+            this.actions.push(this.tweet.id)
+            this.loadActions()
+        },
+        saveActions : function() {
+            axios.post('http://localhost:6050/users/actions', {
+                id : this.user,
+                actions : this.actions
+            }).then((response) => {
+                if(response.status == 200) {
+                    console.log('saved actions')
+                    while(this.actions.length > 0)
+                        this.actions.pop()
+                    $('#list-tab').empty()
+                }
+            }).catch((error) => {
+                console.log('error actins')
+            })
+        },
+        clearActions : function() {
+            axios.get('http://localhost:6050/users/actions', {
+                params : {
+                    id : this.user
+                }
+            }).then((response) => {
+                if(response.status == 200)
+                    while(this.actions.length > 0)
+                        this.actions.pop()
+                $('#list-tab').empty()
+            }).catch((error) => {
+                console.log('error clearing')
+            })
         }
     },
     created() {
