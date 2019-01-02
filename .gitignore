@@ -3,3 +3,5 @@
 
 #misc
 .env
+__pycache__
+.vscode
